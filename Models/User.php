@@ -1,7 +1,6 @@
 <?php
 require "validate.php";
 require "../config/MysqlDb.php";
-
 class User extends MysqlDb
 {
     public function getUser($value)
@@ -48,7 +47,9 @@ class User extends MysqlDb
     }
 
     public function login($request)
-    {
+    {       
+        $cookie_name = "auth";
+        $cookie_expiry = 3600 * 24 * 30; 
         if(isset($request)) {
             $email = $_POST['email'];
             $password = md5($_POST['password']);
@@ -56,10 +57,16 @@ class User extends MysqlDb
             $user = $this->getUser($email);
 
             $error = validateLogin($email, $_POST['password']);
+            $remember = isset($_POST['remember']) ? $password : '';
+            
             if (empty($error)) {
                 if ($user['password'] === $password && $user['email'] === $email) {
                     $_SESSION['username'] = $user['username'];
-                    header("location: ../index.php");
+                    $_SESSION['id'] = $user['email'];
+                    if($remember === $password) {
+                        setcookie($cookie_name, 'user='.$user['username'].'&pw='.$user['password'], time() + $cookie_expiry, '/', '', 0);
+                    }
+                    header("location: ../page/articles/index.php");
                 } else {
                     $msg['error'] = "Incorrect email or password";
                 }

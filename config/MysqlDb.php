@@ -10,11 +10,18 @@ class MysqlDb
         $this->conn = $conn;
     }
 
-    public function get($table)
+    public function getTable($table)
     {
         $sql = "SELECT * FROM $table";
         $query = mysqli_query($this->conn, $sql);
        return mysqli_fetch_assoc($query);
+    }
+
+    public function getAll($table1, $table2, $key, $value)
+    {
+        $sql = "SELECT * FROM $table1 LEFT JOIN $table2 ON $key = $value";
+        $query = mysqli_query($this->conn, $sql);
+        return mysqli_fetch_all($query, MYSQLI_ASSOC); 
     }
 
     public function getOne($table, $key, $value)
@@ -39,13 +46,13 @@ class MysqlDb
             $sql.= "$key = '$values',";
         }
         $sql = "UPDATE $table SET " . trim($sql,','). " WHERE $id = $value ";
-
+        
         mysqli_query($this->conn, $sql);
     }
 
-    public function delete($table, $value)
+    public function delete($table, $id, $value)
     {
-        $sql = "DELETE FROM $table WHERE id = $value";
+        $sql = "DELETE FROM $table WHERE $id = $value";
         mysqli_query($this->conn, $sql);
     }
 

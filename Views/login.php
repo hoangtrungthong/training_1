@@ -13,7 +13,7 @@ $user = $users->login($_POST['login']);
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đăng Nhập</title>
-    <link rel="stylesheet" href="../vendor/styles.css">
+    <link rel="stylesheet" href="../vendor/style.css">
 </head>
 <body>
     <div>
@@ -30,11 +30,11 @@ $user = $users->login($_POST['login']);
                 <p class="highlight"><?php echo $user['password'] ?></p>
             </div>
             <div id="keep">
-                <input type="checkbox" name="remember" id="remember">
+                <input type="checkbox" name="remember" id="remember" value="<?php echo $_POST['password'] ?>">
                 <label for="remember">Remember Me</label>
             </div>
             <p class="highlight"><?php echo $user['error'] ?></p>
-            <button type="submit" name="login">Login</button>
+            <button class="btn" type="submit" name="login">Login</button>
             <p>Don't have a account? <a href="register.php">Register &raquo;</a></p>
         </form>
     </div>
